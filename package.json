@@ -1,0 +1,31 @@
+{
+  "name": "tut-prismagram",
+  "version": "1.0.0",
+  "repository": "https://github.com/kimjeongwonn/tut-prismagram",
+  "author": "kimjeongwonn <66168187+kimjeongwonn@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/morgan": "^1.9.1",
+    "dotenv": "^8.2.0",
+    "graphql-tools": "^6.0.15",
+    "graphql-yoga": "^1.18.3",
+    "merge-graphql-schemas": "^1.7.8",
+    "morgan": "^1.10.0",
+    "nexus": "^0.26.1",
+    "nexus-prisma": "^0.16.2"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.3.0",
+    "@types/node": "^14.0.27",
+    "typescript": "^3.9.7",
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "tc": "yarn tsc src/server.ts --noEmit",
+    "start": "yarn nodemon --exec babel-node src/server.ts --extensions '.ts'"
+  }
+}
