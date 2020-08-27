@@ -9,23 +9,25 @@
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@prisma/client": "^2.5.1",
     "@types/morgan": "^1.9.1",
     "dotenv": "^8.2.0",
     "graphql-tools": "^6.0.15",
     "graphql-yoga": "^1.18.3",
     "merge-graphql-schemas": "^1.7.8",
     "morgan": "^1.10.0",
-    "nexus": "^0.26.1",
     "nexus-prisma": "^0.16.2"
   },
   "devDependencies": {
     "@prisma/cli": "^2.3.0",
     "@types/node": "^14.0.27",
-    "typescript": "^3.9.7",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "typescript": "^3.9.7"
   },
   "scripts": {
-    "tc": "yarn tsc src/server.ts --noEmit",
-    "start": "yarn nodemon --exec babel-node src/server.ts --extensions '.ts'"
+    "tc": "tsc ./src/server.ts --noEmit --esModuleInterop",
+    "start": "nodemon --exec babel-node ./src/server.ts --extensions '.ts'",
+    "mup": "prisma migrate up --experimental",
+    "msave": "prisma migrate save --experimental"
   }
 }
