@@ -11,10 +11,10 @@ generator client {
 }
 
 model User {
-  id              Int       @default(autoincrement()) @id
+  id              String    @default(cuid()) @id
   username        String    @unique
   email           String    @unique
-  firstname       String?
+  firstName       String?
   lastName        String?
   bio             String?
   followers       User[]    @relation("FollowRelation", references: [id])
@@ -22,27 +22,27 @@ model User {
   posts           Post[]
   likes           Like[]
   comments        Comment[]
-  room            Room[]
-  sendmessages    Message[] @relation("ToUser")
-  receivemessages Message[] @relation("FromUser")
+  rooms           Room[]
+  sendMessages    Message[] @relation("ToUser")
+  receiveMessages Message[] @relation("FromUser")
 }
 
 model Post {
-  id       Int     @default(autoincrement()) @id
+  id       Int       @default(autoincrement()) @id
   location String?
   caption  String?
   files    File[]
   likes    Like[]
-  comments Comment
-  user     User?   @relation(fields: [userId], references: [id])
-  userId   Int?
+  comments Comment[]
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String
 }
 
 model Like {
-  id     Int  @default(autoincrement()) @id
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-  post   Post @relation(fields: [postId], references: [id])
+  id     Int    @default(autoincrement()) @id
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  post   Post   @relation(fields: [postId], references: [id])
   postId Int
 }
 
@@ -50,7 +50,7 @@ model Comment {
   id     Int    @default(autoincrement()) @id
   text   String
   user   User   @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   post   Post   @relation(fields: [postId], references: [id])
   postId Int
 }
@@ -72,10 +72,10 @@ model Message {
   id         Int      @default(autoincrement()) @id
   text       String
   fromUser   User     @relation("FromUser", fields: [fromUserId], references: [id])
-  fromUserId Int
+  fromUserId String
   toUser     User     @relation("ToUser", fields: [toUserId], references: [id])
-  toUserId   Int
+  toUserId   String
   room       Room     @relation(fields: [roomId], references: [id])
   roomId     Int
-  timestamp  DateTime @default(now())
+  timeStamp  DateTime @default(now())
 }

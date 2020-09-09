@@ -15,6 +15,6 @@ schema.objectType({
     t.list.field('comments', {
       type: 'Comment',
     });
-    t.id('userId', { nullable: true });
+    t.id('userId');
   },
 });

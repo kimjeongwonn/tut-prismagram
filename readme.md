@@ -8,7 +8,7 @@
 - [ ] Follow / Unfollow User
 - [ ] See the full photo
 - [ ] Edit my profile
-- [ ] Create account
+- [x] Create account
 - [ ] Log in
 - [ ] Upload a photo
 - [ ] Edit the photo (Delete)

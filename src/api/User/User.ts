@@ -55,15 +55,15 @@ schema.objectType({
   },
 });
 
-//defined userById
+//defined Query
 schema.queryType({
   definition(t) {
     t.field('userById', {
       type: 'User',
       args: {
-        id: schema.intArg({ required: true }),
+        id: schema.stringArg({ required: true }),
       },
-      resolve(_, args, ctx) {
+      resolve(_root, args, ctx) {
         return ctx.db.user.findOne({ where: { id: args.id } });
       },
     });

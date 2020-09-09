@@ -42,6 +42,10 @@ type Message {
   toUserId: ID!
 }
 
+type Mutation {
+  createAccount(bio: String, email: String!, firstName: String, lastName: String, username: String!): User!
+}
+
 type Post {
   caption: String
   comments: [Comment!]!
@@ -49,12 +53,12 @@ type Post {
   id: ID!
   likes: [Like!]!
   location: String
-  userId: ID
+  userId: ID!
 }
 
 type Query {
   allUsers: [User!]!
-  userById(id: Int!): User!
+  userById(id: String!): User!
 }
 
 type Room {
