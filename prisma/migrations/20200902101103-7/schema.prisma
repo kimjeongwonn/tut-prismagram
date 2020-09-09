@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -34,8 +34,8 @@ model Post {
   files    File[]
   likes    Like[]
   comments Comment[]
-  user     User?     @relation(fields: [userId], references: [id])
-  userId   Int?
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int
 }
 
 model Like {
