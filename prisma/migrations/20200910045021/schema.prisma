@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -11,22 +11,28 @@ generator client {
 }
 
 model User {
-  id              String    @default(cuid()) @id
-  username        String    @unique
-  email           String    @unique
-  firstName       String?   @default("")
-  lastName        String?   @default("")
-  bio             String?   @default("")
-  loginSecret     String?
-  followers       User[]    @relation("FollowRelation", references: [id])
-  followings      User[]    @relation("FollowRelation", references: [id])
+  id              String         @default(cuid()) @id
+  username        String         @unique
+  email           String         @unique
+  firstName       String?        @default("")
+  lastName        String?        @default("")
+  bio             String?        @default("")
+  password        String
+  followers       User[]         @relation("FollowRelation", references: [id])
+  following       User[]         @relation("FollowRelation", references: [id])
   posts           Post[]
   likes           Like[]
   comments        Comment[]
   rooms           Room[]
-  sendMessages    Message[] @relation("ToUser")
-  receiveMessages Message[] @relation("FromUser")
-  signUpAt        DateTime  @default(now())
+  sendMessages    Message[]      @relation("ToUser")
+  receiveMessages Message[]      @relation("FromUser")
+  AuthoPayload    AuthoPayload[]
+}
+
+model AuthoPayload {
+  token        String @unique
+  approvedUser User   @relation(fields: [userId], references: [id])
+  userId       String
 }
 
 model Post {
@@ -38,7 +44,6 @@ model Post {
   comments Comment[]
   user     User      @relation(fields: [userId], references: [id])
   userId   String
-  postAt   DateTime  @default(now())
 }
 
 model Like {
@@ -50,13 +55,12 @@ model Like {
 }
 
 model Comment {
-  id        Int      @default(autoincrement()) @id
-  text      String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  commentAt DateTime @default(now())
+  id     Int    @default(autoincrement()) @id
+  text   String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId Int
 }
 
 model File {

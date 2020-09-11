@@ -1,6 +1,7 @@
 import { schema } from 'nexus';
 
-schema.mutationType({
+schema.extendType({
+  type: 'Mutation',
   definition(t) {
     t.field('createAccount', {
       type: 'User',

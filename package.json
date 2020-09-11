@@ -20,15 +20,16 @@
     "nexus-plugin-prisma": "^0.17.0"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.3.0",
+    "@prisma/cli": "^2.6.2",
     "@types/node": "^14.0.27",
     "nodemon": "^2.0.4",
-    "typescript": "^3.9.7"
+    "to": "^0.2.9",
+    "typescript": "^3.9.7",
+    "update": "^0.7.4"
   },
   "scripts": {
     "tc": "tsc ./src/server.ts --noEmit --esModuleInterop",
     "start": "nodemon --exec babel-node ./src/server.ts --extensions '.ts'",
-    "mup": "prisma migrate up --experimental",
-    "msave": "prisma migrate save --experimental"
+    "migrating": "prisma migrate save --experimental && prisma migrate up --experimental"
   }
 }
