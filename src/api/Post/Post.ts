@@ -9,16 +9,8 @@ schema.objectType({
     t.model.files();
     t.model.likes();
     t.model.comments();
+    t.model.user();
     t.model.userId();
-  },
-});
-
-schema.objectType({
-  name: 'Like',
-  definition(t) {
-    t.id('id');
-    t.id('userId');
-    t.id('postId');
   },
 });
 

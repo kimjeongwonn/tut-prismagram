@@ -1,3 +1,16 @@
+const sgTransport = require('nodemailer-sendgrid-transport');
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
+
+interface Email {
+  from: string;
+  to: string;
+  subject: string;
+  html?: string;
+}
+
 const adjectives = [
   'ill-fated',
   'hulking',
@@ -1006,3 +1019,26 @@ export const generateSecret = (): string => {
   const randomNumber = Math.floor(Math.random() * adjectives.length);
   return `${adjectives[randomNumber]} ${nouns[randomNumber]}`;
 };
+
+const sendMail = (email: Email) => {
+  const option = {
+    auth: {
+      api_user: process.env.SENDGRID_USERNAME,
+      api_key: process.env.SENDGRID_PASSWORD,
+    },
+  };
+  const client = nodemailer.createTransport(sgTransport(option));
+  return client.sendMail(email);
+};
+
+export const sendSecretMail = (address: string, secret: string) => {
+  const email = {
+    from: 'garden1594@naver.com',
+    to: address,
+    subject: 'Login Secret for Prismagram 🔒',
+    html: `Hello! Your login secret is <strong>${secret}</strong><br/> Copy paste on the app/website to login`,
+  };
+  return sendMail(email);
+};
+
+export const generateToken = (id: string) => jwt.sign({ id }, process.env.JWT_SECRET!); //0-1. 받은 id를 SECRET을 사용하여 토큰으로 생성

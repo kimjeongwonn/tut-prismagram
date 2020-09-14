@@ -1,5 +1,4 @@
 import { schema } from 'nexus';
-import { setupMaster } from 'cluster';
 
 schema.extendType({
   type: 'Query',
@@ -7,6 +6,7 @@ schema.extendType({
     t.list.field('allUsers', {
       type: 'User',
       async resolve(_root, _args, ctx) {
+        console.log(ctx.user);
         return await ctx.db.user.findMany();
       },
     });
@@ -16,7 +16,7 @@ schema.extendType({
         id: schema.stringArg({ required: false }),
         username: schema.stringArg({ required: false }),
       },
-      resolve(_root, args, ctx) {
+      resolve(_root, args, ctx): any {
         return ctx.db.user.findOne({ where: { id: args.id!, username: args.username! } });
       },
     });

@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -18,8 +18,8 @@ model User {
   lastName        String?   @default("")
   bio             String?   @default("")
   loginSecret     String?
-  followers       User[]    @relation("FollowRelation")
-  followings      User[]    @relation("FollowRelation")
+  followers       User[]    @relation("FollowRelation", references: [id])
+  followings      User[]    @relation("FollowRelation", references: [id])
   posts           Post[]    @relation("PostList")
   likes           Post[]    @relation("LikeList")
   comments        Comment[]
