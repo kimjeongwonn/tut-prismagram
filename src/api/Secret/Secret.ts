@@ -1,6 +1,16 @@
 import { schema } from 'nexus';
 import { generateSecret, sendSecretMail, generateToken } from './util';
 
+schema.objectType({
+  name: 'AutoPayload',
+  definition(t) {
+    t.string('token');
+    t.field('approvedUser', {
+      type: 'User',
+    });
+  },
+});
+
 schema.extendType({
   type: 'Mutation',
   definition(t) {
@@ -29,8 +39,8 @@ schema.extendType({
       },
       async resolve(_root, args, ctx) {
         const { email, secret } = args;
-        const user = (await ctx.db.user.findOne({ where: { email } })) as User;
-        if (user.loginSecret === secret) {
+        const user = await ctx.db.user.findOne({ where: { email } });
+        if (user?.loginSecret === secret) {
           await ctx.db.user.update({ where: { id: user.id }, data: { loginSecret: '' } });
           return generateToken(user.id); //0-2. 사용자의 아이디를 담은 토큰을 반환
         } else {

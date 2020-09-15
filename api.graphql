@@ -8,10 +8,12 @@ type AutoPayload {
 }
 
 type Comment {
-  id: ID!
-  postId: ID!
+  id: Int!
+  post: Post!
+  postId: Int!
   text: String!
-  userId: ID!
+  user: User!
+  userId: String!
 }
 
 input CommentWhereUniqueInput {
@@ -26,13 +28,10 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
 scalar DateTime
 
 type File {
-  id: ID!
-  postId: ID!
+  id: Int!
+  post: Post!
+  postId: Int!
   url: String!
-}
-
-input FileWhereUniqueInput {
-  id: Int
 }
 
 """
@@ -57,20 +56,31 @@ type Mutation {
   addComment(postId: Int!, text: String!): Comment!
   confirmSecret(email: String!, secret: String!): String!
   createAccount(bio: String, email: String!, firstName: String, lastName: String, username: String!): User!
+  editUser(bio: String, firstName: String, lastName: String, username: String): User!
   followToggle(followId: String!): Boolean!
+  modifyPost(action: PostAction!, caption: String, location: String, postId: Int!): Post
   requestSecret(email: String!): Boolean!
   toggleLike(postId: Int!): Boolean!
+  writePost(caption: String, location: String, url: [String!]!): Post!
 }
 
 type Post {
   caption: String
   comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int!, last: Int!): [Comment!]!
-  files(after: FileWhereUniqueInput, before: FileWhereUniqueInput, first: Int!, last: Int!): [File!]!
+  commentsCount: Int!
+  files: [File!]!
   id: Int!
+  isLike: Boolean!
   likes(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
+  likesCount: Int!
   location: String
   user: User!
   userId: String!
+}
+
+enum PostAction {
+  DELETE
+  EDIT
 }
 
 input PostWhereUniqueInput {
@@ -81,7 +91,11 @@ type Query {
   allUsers: [User!]!
   searchPost(keyword: String!): [Post!]!
   searchUsers(keyword: String!): [User!]!
-  userById(id: String, username: String): User!
+  seeMy: User!
+  seeMyPosts: [Post!]!
+  seePost(postId: Int!): Post!
+  seeUser(id: String!): User!
+  seeUserPosts(userId: String!): [Post!]!
 }
 
 type Room {
@@ -100,12 +114,18 @@ type User {
   email: String!
   firstName: String
   followers(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
+  followersCount: Int!
   followings(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
+  followingsCount: Int!
+  fullName: String!
   id: String!
+  isFollowing: Boolean!
+  isSelf: Boolean!
   lastName: String
   likes(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
   loginSecret: String
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
+  postsCount: Int!
   receiveMessages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   rooms(after: RoomWhereUniqueInput, before: RoomWhereUniqueInput, first: Int!, last: Int!): [Room!]!
   sendMessages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!

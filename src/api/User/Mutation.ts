@@ -51,5 +51,26 @@ schema.extendType({
         }
       },
     });
+    //--> 팔로잉 토글
+    //정보 수정 <--
+    t.field('editUser', {
+      type: 'User',
+      args: {
+        username: schema.stringArg({ required: false }),
+        firstName: schema.stringArg({ required: false }),
+        lastName: schema.stringArg({ required: false }),
+        bio: schema.stringArg({ required: false }),
+      },
+      resolve(_root, args, ctx) {
+        ctx.isAuthenticated();
+        const { username, firstName, lastName, bio } = args;
+        const { user } = ctx;
+        return ctx.db.user.update({
+          where: { id: user.id },
+          data: { username: username!, firstName, lastName, bio },
+        });
+      },
+    });
+    //--> 정보 수정
   },
 });

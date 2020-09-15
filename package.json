@@ -39,6 +39,7 @@
   "scripts": {
     "tc": "tsc ./src/server.ts --noEmit --esModuleInterop",
     "start": "nodemon --exec babel-node ./src/server.ts --extensions '.ts'",
-    "migrating": "prisma migrate save --experimental && prisma migrate up --experimental"
+    "migrating": "prisma migrate save --experimental && prisma migrate up --experimental",
+    "studio": "prisma studio -p 3000 --experimental"
   }
 }
