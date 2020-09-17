@@ -30,6 +30,7 @@ schema.objectType({
         return ctx.db.comment.count({ where: { postId: root.id } });
       },
     });
+    t.model.postAt();
   },
 });
 
@@ -52,5 +53,14 @@ schema.objectType({
     t.model.postId();
     t.model.user();
     t.model.userId();
+  },
+});
+
+schema.objectType({
+  name: 'FeedList',
+  definition(t) {
+    t.list.field('posts', {
+      type: 'Post',
+    });
   },
 });

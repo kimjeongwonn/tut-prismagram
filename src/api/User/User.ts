@@ -49,8 +49,7 @@ schema.objectType({
     t.model.likes();
     t.model.comments();
     t.model.rooms();
-    t.model.sendMessages();
-    t.model.receiveMessages();
+    t.model.messages();
     t.int('postsCount', {
       resolve(root, _, ctx) {
         return ctx.db.post.count({ where: { userId: root.id } });

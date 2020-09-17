@@ -1,7 +1,4 @@
 import { schema } from 'nexus';
-import { arg, stringArg } from 'nexus/components/schema';
-import { create } from 'nexus/dist/runtime/schema';
-import { resolve } from 'path';
 
 const checkPostUser = async (args: { postId: number }, ctx: NexusContext) => {
   const isMine = await ctx.db.user.count({ where: { id: ctx.user.id, posts: { some: { id: args.postId } } } });
@@ -48,7 +45,7 @@ schema.extendType({
         location: schema.stringArg({ required: false }),
         action: schema.arg({ type: 'PostAction', required: true }),
       },
-      async resolve(_, args, ctx): Promise<any> {
+      async resolve(_, args, ctx) {
         const { postId, caption, location, action } = args;
         ctx.isAuthenticated();
         await checkPostUser(args, ctx);
@@ -68,8 +65,7 @@ schema.extendType({
             await ctx.db.file.deleteMany({
               where: { postId },
             });
-            await ctx.db.post.delete({ where: { id: postId } });
-            break;
+            return ctx.db.post.delete({ where: { id: postId } });
         }
       },
     });

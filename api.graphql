@@ -27,6 +27,10 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
 """
 scalar DateTime
 
+type FeedList {
+  posts: [Post!]!
+}
+
 type File {
   id: Int!
   post: Post!
@@ -45,7 +49,6 @@ type Message {
   roomId: Int!
   text: String!
   timeStamp: DateTime!
-  toUserId: String!
 }
 
 input MessageWhereUniqueInput {
@@ -60,6 +63,7 @@ type Mutation {
   followToggle(followId: String!): Boolean!
   modifyPost(action: PostAction!, caption: String, location: String, postId: Int!): Post
   requestSecret(email: String!): Boolean!
+  SendMessage(roomId: Int, text: String!, toUserId: ID): Message!
   toggleLike(postId: Int!): Boolean!
   writePost(caption: String, location: String, url: [String!]!): Post!
 }
@@ -74,6 +78,7 @@ type Post {
   likes(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
   likesCount: Int!
   location: String
+  postAt: DateTime!
   user: User!
   userId: String!
 }
@@ -91,11 +96,15 @@ type Query {
   allUsers: [User!]!
   searchPost(keyword: String!): [Post!]!
   searchUsers(keyword: String!): [User!]!
+  seeFeed(cursor: Int): [Post!]!
+  seeMessages(cursor: Int, roomId: Int!): [Message!]!
   seeMy: User!
   seeMyPosts: [Post!]!
+  seeMyRooms: [Room!]!
   seePost(postId: Int!): Post!
+  seeRoom(roomId: Int!): Room!
   seeUser(id: String!): User!
-  seeUserPosts(userId: String!): [Post!]!
+  seeUserPosts(userId: ID!): [Post!]!
 }
 
 type Room {
@@ -124,11 +133,10 @@ type User {
   lastName: String
   likes(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
   loginSecret: String
+  messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
   postsCount: Int!
-  receiveMessages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   rooms(after: RoomWhereUniqueInput, before: RoomWhereUniqueInput, first: Int!, last: Int!): [Room!]!
-  sendMessages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   username: String!
 }
 

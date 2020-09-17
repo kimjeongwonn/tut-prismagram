@@ -6,7 +6,6 @@ schema.objectType({
     t.model.id();
     t.model.text();
     t.model.fromUserId();
-    t.model.toUserId();
     t.model.roomId();
     t.model.timeStamp();
   },

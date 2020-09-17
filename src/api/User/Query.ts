@@ -14,45 +14,22 @@ schema.extendType({
       args: {
         id: schema.stringArg({ required: true }),
       },
-      resolve(_root, args, ctx) {
-        return ctx.db.user
-          .findOne({
-            where: { id: args.id },
-            select: {
-              id: true,
-              username: true,
-              firstName: true,
-              lastName: true,
-              bio: true,
-              posts: true,
-              followers: true,
-              followings: true,
-            },
-          })
-          .then();
+      /// @ts-ignore
+      resolve(_, args, ctx, info) {
+        return ctx.db.user.findOne({
+          where: { id: args.id },
+        });
       },
     });
     t.field('seeMy', {
       type: 'User',
-      async resolve(_, __, ctx) {
+      /// @ts-ignore
+      async resolve(_, __, ctx, info) {
         ctx.isAuthenticated();
         const { user } = ctx;
-        return await ctx.db.user
-          .findOne({
-            where: { id: user.id },
-            select: {
-              id: true,
-              username: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-              bio: true,
-              posts: true,
-              followers: true,
-              followings: true,
-            },
-          })
-          .then();
+        return await ctx.db.user.findOne({
+          where: { id: user.id },
+        });
       },
     });
   },

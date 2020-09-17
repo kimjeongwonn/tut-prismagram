@@ -10,15 +10,16 @@ settings.change({
     },
   },
 });
+use(prisma());
 schema.addToContext(({ req, res }) => {
+  /// @ts-ignore
   const { user } = req;
   return {
     user,
     isAuthenticated: () => {
-      if (!user) throw new Error('You need to log in to perform this action');
+      if (!user) throw Error('로그인이 필요합니다!');
       return;
     },
   };
 });
-use(prisma());
 server.express.use(authenticateJwt); //1. 모든 Request시에 Header에 있는 토큰을 체크

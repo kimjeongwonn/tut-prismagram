@@ -11,22 +11,21 @@ generator client {
 }
 
 model User {
-  id              String    @default(cuid()) @id
-  username        String    @unique
-  email           String    @unique
-  firstName       String?   @default("")
-  lastName        String?   @default("")
-  bio             String?   @default("")
-  loginSecret     String?
-  followers       User[]    @relation("FollowRelation")
-  followings      User[]    @relation("FollowRelation")
-  posts           Post[]    @relation("PostList")
-  likes           Post[]    @relation("LikeList")
-  comments        Comment[]
-  rooms           Room[]
-  sendMessages    Message[] @relation("ToUser")
-  receiveMessages Message[] @relation("FromUser")
-  signUpAt        DateTime  @default(now())
+  id          String    @default(cuid()) @id
+  username    String    @unique
+  email       String    @unique
+  firstName   String?   @default("")
+  lastName    String?   @default("")
+  bio         String?   @default("")
+  loginSecret String?
+  followers   User[]    @relation("FollowRelation")
+  followings  User[]    @relation("FollowRelation")
+  posts       Post[]    @relation("PostList")
+  likes       Post[]    @relation("LikeList")
+  comments    Comment[]
+  rooms       Room[]
+  messages    Message[]
+  signUpAt    DateTime  @default(now())
 }
 
 model Post {
@@ -67,10 +66,8 @@ model Room {
 model Message {
   id         Int      @default(autoincrement()) @id
   text       String
-  fromUser   User     @relation("FromUser", fields: [fromUserId], references: [id])
+  fromUser   User     @relation(fields: [fromUserId], references: [id])
   fromUserId String
-  toUser     User     @relation("ToUser", fields: [toUserId], references: [id])
-  toUserId   String
   room       Room     @relation(fields: [roomId], references: [id])
   roomId     Int
   timeStamp  DateTime @default(now())
