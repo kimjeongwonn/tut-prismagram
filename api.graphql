@@ -10,10 +10,8 @@ type AutoPayload {
 type Comment {
   id: Int!
   post: Post!
-  postId: Int!
   text: String!
   user: User!
-  userId: String!
 }
 
 input CommentWhereUniqueInput {
@@ -34,7 +32,6 @@ type FeedList {
 type File {
   id: Int!
   post: Post!
-  postId: Int!
   url: String!
 }
 
@@ -44,9 +41,9 @@ The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http:/
 scalar Json
 
 type Message {
-  fromUserId: String!
+  fromUser: User!
   id: Int!
-  roomId: Int!
+  room: Room!
   text: String!
   timeStamp: DateTime!
 }
@@ -80,7 +77,6 @@ type Post {
   location: String
   postAt: DateTime!
   user: User!
-  userId: String!
 }
 
 enum PostAction {
@@ -97,12 +93,10 @@ type Query {
   searchPost(keyword: String!): [Post!]!
   searchUsers(keyword: String!): [User!]!
   seeFeed(cursor: Int): [Post!]!
-  seeMessages(cursor: Int, roomId: Int!): [Message!]!
   seeMy: User!
   seeMyPosts: [Post!]!
   seeMyRooms: [Room!]!
   seePost(postId: Int!): Post!
-  seeRoom(roomId: Int!): Room!
   seeUser(id: String!): User!
   seeUserPosts(userId: ID!): [Post!]!
 }
@@ -110,17 +104,12 @@ type Query {
 type Room {
   id: Int!
   messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
-  participant(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
-}
-
-input RoomWhereUniqueInput {
-  id: Int
+  participant: [User!]!
+  seeMessages(cursor: Int): [Message!]!
 }
 
 type User {
   bio: String
-  comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int!, last: Int!): [Comment!]!
-  email: String!
   firstName: String
   followers(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int!, last: Int!): [User!]!
   followersCount: Int!
@@ -131,12 +120,9 @@ type User {
   isFollowing: Boolean!
   isSelf: Boolean!
   lastName: String
-  likes(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
-  loginSecret: String
-  messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int!, last: Int!): [Post!]!
   postsCount: Int!
-  rooms(after: RoomWhereUniqueInput, before: RoomWhereUniqueInput, first: Int!, last: Int!): [Room!]!
+  profileImage: String
   username: String!
 }
 

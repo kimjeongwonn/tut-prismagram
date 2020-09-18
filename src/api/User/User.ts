@@ -6,7 +6,8 @@ schema.objectType({
   definition(t) {
     t.model.id();
     t.model.username();
-    t.model.email();
+    t.model.profileImage();
+    // t.model.email();
     t.model.firstName();
     t.model.lastName();
     t.string('fullName', {
@@ -15,7 +16,7 @@ schema.objectType({
       },
     });
     t.model.bio();
-    t.model.loginSecret();
+    // t.model.loginSecret();
     t.int('followersCount', {
       resolve(root, _, ctx) {
         return ctx.db.user.count({ where: { followings: { some: { id: root.id } } } });
@@ -46,10 +47,10 @@ schema.objectType({
       },
     });
     t.model.posts();
-    t.model.likes();
-    t.model.comments();
-    t.model.rooms();
-    t.model.messages();
+    // t.model.likes();
+    // t.model.comments();
+    // t.model.participatings();
+    // t.model.messages();
     t.int('postsCount', {
       resolve(root, _, ctx) {
         return ctx.db.post.count({ where: { userId: root.id } });

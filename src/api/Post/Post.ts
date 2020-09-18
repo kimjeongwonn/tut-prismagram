@@ -19,7 +19,6 @@ schema.objectType({
     });
     t.model.comments();
     t.model.user();
-    t.model.userId();
     t.int('likesCount', {
       resolve(root, _, ctx) {
         return ctx.db.user.count({ where: { likes: { some: { id: root.id } } } });
@@ -40,7 +39,6 @@ schema.objectType({
     t.model.id();
     t.model.url();
     t.model.post();
-    t.model.postId();
   },
 });
 
@@ -50,9 +48,7 @@ schema.objectType({
     t.model.id();
     t.model.text();
     t.model.post();
-    t.model.postId();
     t.model.user();
-    t.model.userId();
   },
 });
 

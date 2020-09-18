@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -11,22 +11,21 @@ generator client {
 }
 
 model User {
-  id             String    @default(cuid()) @id
-  username       String    @unique
-  email          String    @unique
-  firstName      String?   @default("")
-  lastName       String?   @default("")
-  bio            String?   @default("")
-  profileImage   String?   @default("")
-  loginSecret    String?
-  followers      User[]    @relation("FollowRelation")
-  followings     User[]    @relation("FollowRelation")
-  posts          Post[]    @relation("PostList")
-  likes          Post[]    @relation("LikeList")
-  comments       Comment[]
-  participatings Room[]
-  messages       Message[] @relation("SendRelation")
-  signUpAt       DateTime  @default(now())
+  id          String    @default(cuid()) @id
+  username    String    @unique
+  email       String    @unique
+  firstName   String?   @default("")
+  lastName    String?   @default("")
+  bio         String?   @default("")
+  loginSecret String?
+  followers   User[]    @relation("FollowRelation")
+  followings  User[]    @relation("FollowRelation")
+  posts       Post[]    @relation("PostList")
+  likes       Post[]    @relation("LikeList")
+  comments    Comment[]
+  rooms       Room[]    @relation("chatRoom")
+  messages    Message[] @relation("SendRelation")
+  signUpAt    DateTime  @default(now())
 }
 
 model Post {
@@ -60,7 +59,7 @@ model File {
 
 model Room {
   id          Int       @default(autoincrement()) @id
-  participant User[]
+  participant User[]    @relation("chatRoom")
   messages    Message[]
 }
 

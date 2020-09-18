@@ -18,6 +18,14 @@ schema.extendType({
       resolve(_, args, ctx, info) {
         return ctx.db.user.findOne({
           where: { id: args.id },
+          select: {
+            participatings: false,
+            messages: false,
+            loginSecret: false,
+            email: false,
+            comments: false,
+            likes: false,
+          },
         });
       },
     });
