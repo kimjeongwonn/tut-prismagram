@@ -60,7 +60,7 @@ type Mutation {
   followToggle(followId: String!): Boolean!
   modifyPost(action: PostAction!, caption: String, location: String, postId: Int!): Post
   requestSecret(email: String!): Boolean!
-  SendMessage(roomId: Int, text: String!, toUserId: ID): Message!
+  SendMessage(roomId: Int, text: String!, toUserId: ID, toUserName: String!): Message!
   toggleLike(postId: Int!): Boolean!
   writePost(caption: String, location: String, url: [String!]!): Post!
 }
@@ -106,6 +106,10 @@ type Room {
   messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int!, last: Int!): [Message!]!
   participant: [User!]!
   seeMessages(cursor: Int): [Message!]!
+}
+
+type Subscription {
+  newMessage: Message!
 }
 
 type User {

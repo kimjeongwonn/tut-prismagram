@@ -13,17 +13,14 @@
     "@types/morgan": "^1.9.1",
     "@types/nodemailer": "^6.4.0",
     "dotenv": "^8.2.0",
-    "graphql-tools": "^6.0.15",
-    "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
-    "merge-graphql-schemas": "^1.7.8",
     "morgan": "^1.10.0",
-    "nexus": "^0.26.1",
     "nexus-plugin-prisma": "^0.17.0",
     "nodemailer": "^6.4.11",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {
     "@prisma/cli": "^2.6.2",

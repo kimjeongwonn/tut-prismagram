@@ -9,10 +9,17 @@ schema.extendType({
       args: {
         roomId: schema.intArg({ required: false }),
         toUserId: schema.idArg({ required: false }),
+        toUserName: schema.stringArg({ required: true }),
         text: schema.stringArg({ required: true }),
       },
-      async resolve(_, { roomId: _roomId, toUserId, text }, ctx) {
+      async resolve(_, { roomId: _roomId, toUserId: _toUserId, toUserName, text }, ctx) {
         ctx.isAuthenticated();
+
+        //userId를 받았는지 userName을 받았는지 확인
+        //userId가 있는지 확인하고 있으면 사용 없으면 userName에서 id를 가져옴
+        const toUserId = _toUserId
+          ? _toUserId
+          : (await ctx.db.user.findOne({ where: { username: toUserName }, select: { id: true } }))?.id;
 
         //자신에게 보내는지 확인
         if (toUserId === ctx.user.id) throw Error('자신에게 보낼 수 없습니다!');
@@ -47,12 +54,15 @@ schema.extendType({
           where: { id: roomId, participant: { some: { id: ctx.user.id } } },
         });
 
-        //존재한다면 메세지 생성 후 연결, 없다면 에러 리턴
-        if (isRoom) {
-          return ctx.db.message.create({
-            data: { room: { connect: { id: roomId } }, fromUser: { connect: { id: ctx.user.id } }, text },
-          });
-        } else throw Error('대화방에 참여하고 있지 않습니다!');
+        if (!isRoom) {
+          await ctx.db.room.update({ where: { id: roomId }, data: { participant: { connect: { id: ctx.user.id } } } });
+        }
+
+        const newMessage = await ctx.db.message.create({
+          data: { room: { connect: { id: roomId } }, fromUser: { connect: { id: ctx.user.id } }, text },
+        });
+        await ctx.pubsub.publish('NEW_MESSAGE', { newMessage });
+        return newMessage;
       },
     });
     // --> 메세지 보내기
