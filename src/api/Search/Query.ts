@@ -1,6 +1,6 @@
-import { schema } from 'nexus';
+import * as schema from '@nexus/schema';
 
-schema.extendType({
+export const SearchQuery = schema.extendType({
   type: 'Query',
   definition(t) {
     //사용자 검색하기 <--
@@ -11,7 +11,7 @@ schema.extendType({
       },
       resolve(_, args, ctx) {
         const { keyword } = args;
-        const result = ctx.db.user.findMany({
+        const result = ctx.prisma.user.findMany({
           where: {
             OR: [
               { username: { contains: keyword } },
@@ -30,9 +30,8 @@ schema.extendType({
       args: {
         keyword: schema.stringArg({ required: true }),
       },
-      resolve(_, args, ctx) {
-        const { keyword } = args;
-        const result = ctx.db.post.findMany({
+      async resolve(_, { keyword }, ctx) {
+        const result = ctx.prisma.post.findMany({
           where: {
             OR: [
               { caption: { contains: keyword } },

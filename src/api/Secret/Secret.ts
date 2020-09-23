@@ -1,7 +1,7 @@
-import { schema } from 'nexus';
+import * as schema from '@nexus/schema';
 import { generateSecret, sendSecretMail, generateToken } from './util';
 
-schema.objectType({
+export const AutoPayload = schema.objectType({
   name: 'AutoPayload',
   definition(t) {
     t.string('token');
@@ -11,7 +11,7 @@ schema.objectType({
   },
 });
 
-schema.extendType({
+export const SecretMutation = schema.extendType({
   type: 'Mutation',
   definition(t) {
     t.boolean('requestSecret', {
@@ -22,7 +22,7 @@ schema.extendType({
         const { email } = args;
         const secret = generateSecret();
         try {
-          const user = await ctx.db.user.update({ where: { email }, data: { loginSecret: secret } });
+          const user = await ctx.prisma.user.update({ where: { email }, data: { loginSecret: secret } });
           if (user) {
             await sendSecretMail(email, secret);
           }
@@ -39,9 +39,9 @@ schema.extendType({
       },
       async resolve(_root, args, ctx) {
         const { email, secret } = args;
-        const user = await ctx.db.user.findOne({ where: { email } });
+        const user = await ctx.prisma.user.findOne({ where: { email } });
         if (user?.loginSecret === secret) {
-          await ctx.db.user.update({ where: { id: user.id }, data: { loginSecret: '' } });
+          await ctx.prisma.user.update({ where: { id: user.id }, data: { loginSecret: '' } });
           return generateToken(user.id); //0-2. 사용자의 아이디를 담은 토큰을 반환
         } else {
           throw Error('Wrong email/secret conviation');

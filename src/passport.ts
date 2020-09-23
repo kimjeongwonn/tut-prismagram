@@ -3,6 +3,7 @@ import express from 'express';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { PrismaClient, User } from '@prisma/client';
 require('dotenv').config();
+
 const prisma = new PrismaClient();
 
 const jwtOptions = {

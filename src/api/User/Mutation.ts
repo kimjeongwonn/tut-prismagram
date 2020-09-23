@@ -1,6 +1,6 @@
-import { schema } from 'nexus';
+import * as schema from '@nexus/schema';
 
-schema.extendType({
+export const UserMutation = schema.extendType({
   type: 'Mutation',
   definition(t) {
     //계정생성 <--
@@ -15,7 +15,7 @@ schema.extendType({
       },
       async resolve(root, args, ctx) {
         const { username, email, firstName, lastName, bio } = args;
-        const newUser = await ctx.db.user.create({
+        const newUser = await ctx.prisma.user.create({
           data: {
             username,
             email,
@@ -35,18 +35,21 @@ schema.extendType({
       },
       async resolve(_, args, ctx) {
         ctx.isAuthenticated();
-        const { id: userId } = ctx.user;
+        const { id: userId } = ctx.req.user;
         const { followId } = args;
-        const isFollowing = await ctx.db.user.findMany({
+        const isFollowing = await ctx.prisma.user.findMany({
           where: {
             AND: [{ id: userId }, { followings: { some: { id: followId } } }],
           },
         });
         if (isFollowing[0]) {
-          await ctx.db.user.update({ where: { id: userId }, data: { followings: { disconnect: { id: followId } } } });
+          await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { followings: { disconnect: { id: followId } } },
+          });
           return false;
         } else {
-          await ctx.db.user.update({ where: { id: userId }, data: { followings: { connect: { id: followId } } } });
+          await ctx.prisma.user.update({ where: { id: userId }, data: { followings: { connect: { id: followId } } } });
           return true;
         }
       },
@@ -64,8 +67,8 @@ schema.extendType({
       resolve(_root, args, ctx) {
         ctx.isAuthenticated();
         const { username, firstName, lastName, bio } = args;
-        const { user } = ctx;
-        return ctx.db.user.update({
+        const { user } = ctx.req;
+        return ctx.prisma.user.update({
           where: { id: user.id },
           data: { username: username!, firstName, lastName, bio },
         });

@@ -1,16 +1,17 @@
-import { schema } from 'nexus';
+import * as schema from '@nexus/schema';
+import { Context } from 'graphql-yoga/dist/types';
 
-const checkPostUser = async (args: { postId: number }, ctx: NexusContext) => {
-  const isMine = await ctx.db.user.count({ where: { id: ctx.user.id, posts: { some: { id: args.postId } } } });
+const checkPostUser = async (args: { postId: number }, ctx: Context) => {
+  const isMine = await ctx.prisma.user.count({ where: { id: ctx.req.user.id, posts: { some: { id: args.postId } } } });
   if (!isMine) throw Error('권한이 없습니다!');
 };
 
-schema.enumType({
+export const PostEnum = schema.enumType({
   name: 'PostAction',
   members: ['EDIT', 'DELETE'],
 });
 
-schema.extendType({
+export const PostMutation = schema.extendType({
   type: 'Mutation',
   definition(t) {
     //게시글 업로드 <--
@@ -21,12 +22,11 @@ schema.extendType({
         location: schema.stringArg({ required: false }),
         url: schema.stringArg({ required: true, list: true }),
       },
-      async resolve(_, args, ctx) {
+      async resolve(_, { caption, location, url }, ctx) {
         ctx.isAuthenticated();
-        const { caption, location, url } = args;
-        return ctx.db.post.create({
+        return ctx.prisma.post.create({
           data: {
-            user: { connect: { id: ctx.user.id } },
+            user: { connect: { id: ctx.req.user.id } },
             caption,
             location,
             files: { create: url.map((url) => ({ url })) },
@@ -51,7 +51,7 @@ schema.extendType({
         await checkPostUser(args, ctx);
         switch (action) {
           case 'EDIT':
-            return await ctx.db.post.update({
+            return await ctx.prisma.post.update({
               where: { id: postId },
               data: {
                 caption,
@@ -59,13 +59,13 @@ schema.extendType({
               },
             });
           case 'DELETE':
-            await ctx.db.comment.deleteMany({
+            await ctx.prisma.comment.deleteMany({
               where: { postId },
             });
-            await ctx.db.file.deleteMany({
+            await ctx.prisma.file.deleteMany({
               where: { postId },
             });
-            return ctx.db.post.delete({ where: { id: postId } });
+            return ctx.prisma.post.delete({ where: { id: postId } });
         }
       },
     });
@@ -78,16 +78,16 @@ schema.extendType({
       async resolve(root, args, ctx) {
         ctx.isAuthenticated();
         const { postId } = args;
-        const user = await ctx.user;
-        const isLike = await ctx.db.user.findMany({ where: { id: user.id, likes: { some: { id: postId } } } });
+        const user = await ctx.req.user;
+        const isLike = await ctx.prisma.user.findMany({ where: { id: user.id, likes: { some: { id: postId } } } });
         if (isLike[0]) {
-          await ctx.db.user.update({
+          await ctx.prisma.user.update({
             where: { id: user.id },
             data: { likes: { disconnect: { id: postId } } },
           });
           return false;
         } else {
-          await ctx.db.user.update({
+          await ctx.prisma.user.update({
             where: { id: user.id },
             data: { likes: { connect: { id: postId } } },
           });
@@ -104,9 +104,9 @@ schema.extendType({
         postId: schema.intArg({ required: true }),
       },
       async resolve(_, args, ctx) {
-        const addedComment = await ctx.db.comment.create({
+        const addedComment = await ctx.prisma.comment.create({
           data: {
-            user: { connect: { id: ctx.user.id } },
+            user: { connect: { id: ctx.req.user.id } },
             post: { connect: { id: args.postId } },
             text: args.text,
           },

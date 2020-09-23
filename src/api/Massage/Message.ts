@@ -1,8 +1,7 @@
 import { FindManyMessageArgs } from '@prisma/client';
-import { schema } from 'nexus';
-import { tmpdir } from 'os';
+import * as schema from '@nexus/schema';
 
-schema.objectType({
+export const Message = schema.objectType({
   name: 'Message',
   definition(t) {
     t.model.id();
@@ -13,11 +12,11 @@ schema.objectType({
   },
 });
 
-schema.objectType({
+export const Room = schema.objectType({
   name: 'Room',
   definition(t) {
     t.model.id();
-    t.model.participant({ pagination: false });
+    t.model.participant();
     t.model.messages();
     t.list.field('seeMessages', {
       type: 'Message',
@@ -27,7 +26,7 @@ schema.objectType({
       resolve(root, { cursor }, ctx) {
         const findManyArgs: FindManyMessageArgs = { orderBy: { timeStamp: 'desc' }, take: 20, skip: cursor ? 1 : 0 };
         if (cursor) findManyArgs.cursor = { id: cursor };
-        return ctx.db.room.findOne({ where: { id: root.id } }).messages(findManyArgs);
+        return ctx.prisma.room.findOne({ where: { id: root.id } }).messages(findManyArgs);
       },
     });
   },
