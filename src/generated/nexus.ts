@@ -301,6 +301,11 @@ export interface NexusGenArgTypes {
       cursor?: number | null; // Int
     }
   }
+  Subscription: {
+    newMessage: { // args
+      roomId: number; // Int!
+    }
+  }
   User: {
     followers: { // args
       after?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput

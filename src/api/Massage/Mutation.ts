@@ -62,6 +62,7 @@ export const MessageMutation = schema.extendType({
         }
         const newMessage = await ctx.prisma.message.create({
           data: { room: { connect: { id: roomId } }, fromUser: { connect: { id: ctx.req.user.id } }, text },
+          include: { room: { select: { id: true } } },
         });
         ctx.pubsub.publish('NEW_MESSAGE', newMessage);
         return newMessage;

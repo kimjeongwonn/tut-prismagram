@@ -16,7 +16,10 @@ const verifyUser = async (payload: any, done: any) => {
   //try로 감싸주어 error 발생시 바로 err를 담아서 done 함수를 호출
   try {
     //payload의 내용을 검사 (id를 받음)
-    const user = await prisma.user.findOne({ where: { id: payload.id } });
+    const user = await prisma.user.findOne({
+      where: { id: payload.id },
+      include: { participatings: { select: { id: true } } },
+    });
     //만약 DB에 payload에서 받은 id가 있다면 받은 user객체를 done 함수를 통해 반환
     if (user !== null) {
       return done(null, user);

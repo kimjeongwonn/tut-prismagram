@@ -99,7 +99,7 @@ type Room {
 }
 
 type Subscription {
-  newMessage: Message!
+  newMessage(roomId: Int!): Message!
 }
 
 type User {
