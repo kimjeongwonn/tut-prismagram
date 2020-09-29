@@ -45,7 +45,7 @@ input MessageWhereUniqueInput {
 type Mutation {
   addComment(postId: Int!, text: String!): Comment!
   confirmSecret(email: String!, secret: String!): String!
-  createAccount(bio: String, email: String!, firstName: String, lastName: String, username: String!): User!
+  createAccount(email: String!, firstName: String, lastName: String, username: String!): Boolean!
   editUser(bio: String, firstName: String, lastName: String, username: String): User!
   followToggle(followId: String!): Boolean!
   modifyPost(action: PostAction!, caption: String, location: String, postId: Int!): Post
@@ -80,6 +80,7 @@ input PostWhereUniqueInput {
 
 type Query {
   allUsers: [User!]!
+  checkUser(email: String, username: String): Boolean!
   searchPost(keyword: String!): [Post!]!
   searchUsers(keyword: String!): [User!]!
   seeFeed(cursor: Int): [Post!]!

@@ -1,4 +1,5 @@
 import * as schema from '@nexus/schema';
+import { User } from '@prisma/client';
 
 export const UserQuery = schema.extendType({
   type: 'Query',
@@ -18,14 +19,6 @@ export const UserQuery = schema.extendType({
       resolve(_, args, ctx, info) {
         return ctx.prisma.user.findOne({
           where: { id: args.id },
-          select: {
-            participatings: false,
-            messages: false,
-            loginSecret: false,
-            email: false,
-            comments: false,
-            likes: false,
-          },
         });
       },
     });
@@ -38,6 +31,20 @@ export const UserQuery = schema.extendType({
         return await ctx.prisma.user.findOne({
           where: { id: user.id },
         });
+      },
+    });
+    t.boolean('checkUser', {
+      args: {
+        username: schema.stringArg({ required: false }),
+        email: schema.stringArg({ required: false }),
+      },
+      async resolve(_, { username, email }, ctx) {
+        const user = email
+          ? await ctx.prisma.user.findOne({ where: { email } })
+          : username
+          ? await ctx.prisma.user.findOne({ where: { username } })
+          : false;
+        return Boolean(user);
       },
     });
   },

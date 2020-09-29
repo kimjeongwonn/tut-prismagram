@@ -5,7 +5,7 @@ import { createContext } from './context';
 import { authenticateJwt } from './passport';
 import * as types from './api';
 
-const PORT = 3000;
+const PORT = 4000;
 
 const schema = makeSchema({
   types,

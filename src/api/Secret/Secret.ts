@@ -18,18 +18,15 @@ export const SecretMutation = schema.extendType({
       args: {
         email: schema.stringArg({ required: true }),
       },
-      async resolve(_root, args, ctx) {
-        const { email } = args;
+      async resolve(_root, { email }, ctx) {
         const secret = generateSecret();
-        try {
-          const user = await ctx.prisma.user.update({ where: { email }, data: { loginSecret: secret } });
-          if (user) {
-            await sendSecretMail(email, secret);
-          }
+        const user = await ctx.prisma.user.findOne({ where: { email } });
+        if (user) {
+          await ctx.prisma.user.update({ where: { email }, data: { loginSecret: secret } });
+          await sendSecretMail(email, secret);
           return true;
-        } catch (err) {
-          throw new Error(err);
         }
+        return false;
       },
     });
     t.string('confirmSecret', {

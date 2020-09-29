@@ -132,7 +132,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addComment: NexusGenRootTypes['Comment']; // Comment!
     confirmSecret: string; // String!
-    createAccount: NexusGenRootTypes['User']; // User!
+    createAccount: boolean; // Boolean!
     editUser: NexusGenRootTypes['User']; // User!
     followToggle: boolean; // Boolean!
     modifyPost: NexusGenRootTypes['Post'] | null; // Post
@@ -156,6 +156,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     allUsers: NexusGenRootTypes['User'][]; // [User!]!
+    checkUser: boolean; // Boolean!
     searchPost: NexusGenRootTypes['Post'][]; // [Post!]!
     searchUsers: NexusGenRootTypes['User'][]; // [User!]!
     seeFeed: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -205,7 +206,6 @@ export interface NexusGenArgTypes {
       secret: string; // String!
     }
     createAccount: { // args
-      bio?: string | null; // String
       email: string; // String!
       firstName?: string | null; // String
       lastName?: string | null; // String
@@ -265,6 +265,10 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    checkUser: { // args
+      email?: string | null; // String
+      username?: string | null; // String
+    }
     searchPost: { // args
       keyword: string; // String!
     }

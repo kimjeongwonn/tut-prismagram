@@ -4,27 +4,23 @@ export const UserMutation = schema.extendType({
   type: 'Mutation',
   definition(t) {
     //계정생성 <--
-    t.field('createAccount', {
-      type: 'User',
+    t.boolean('createAccount', {
       args: {
         username: schema.stringArg({ required: true }),
         email: schema.stringArg({ required: true }),
         firstName: schema.stringArg({ required: false }),
         lastName: schema.stringArg({ required: false }),
-        bio: schema.stringArg({ required: false }),
       },
-      async resolve(root, args, ctx) {
-        const { username, email, firstName, lastName, bio } = args;
-        const newUser = await ctx.prisma.user.create({
+      async resolve(_, { username, email, firstName, lastName }, ctx) {
+        await ctx.prisma.user.create({
           data: {
             username,
             email,
             firstName,
             lastName,
-            bio,
           },
         });
-        return newUser;
+        return true;
       },
     });
     //--> 계정생성
