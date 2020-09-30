@@ -1,6 +1,5 @@
 import { FindManyMessageArgs } from '@prisma/client';
 import * as schema from '@nexus/schema';
-import { tmpdir } from 'os';
 
 export const Message = schema.objectType({
   name: 'Message',
