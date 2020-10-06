@@ -205,6 +205,38 @@
     {
       "tag": "CreateField",
       "model": "User",
+      "field": "profileImage",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "profileImage"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "profileImage"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "\"\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
       "field": "loginSecret",
       "type": "String",
       "arity": "Optional"
@@ -347,15 +379,8 @@
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "rooms",
+      "field": "participatings",
       "type": "Room",
-      "arity": "List"
-    },
-    {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "messages",
-      "type": "Message",
       "arity": "List"
     },
     {
@@ -364,7 +389,7 @@
         "path": {
           "tag": "Field",
           "model": "User",
-          "field": "messages"
+          "field": "participatings"
         },
         "directive": "relation"
       }
@@ -376,12 +401,19 @@
         "path": {
           "tag": "Field",
           "model": "User",
-          "field": "messages"
+          "field": "participatings"
         },
         "directive": "relation"
       },
-      "argument": "",
-      "value": "\"SendRelation\""
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "messages",
+      "type": "Message",
+      "arity": "List"
     },
     {
       "tag": "CreateField",
@@ -975,6 +1007,31 @@
       "arity": "List"
     },
     {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Room",
+          "field": "participant"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Room",
+          "field": "participant"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
       "tag": "CreateField",
       "model": "Room",
       "field": "messages",
@@ -1052,20 +1109,6 @@
         },
         "directive": "relation"
       }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Message",
-          "field": "fromUser"
-        },
-        "directive": "relation"
-      },
-      "argument": "name",
-      "value": "\"SendRelation\""
     },
     {
       "tag": "CreateArgument",

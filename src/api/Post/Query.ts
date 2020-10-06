@@ -40,7 +40,7 @@ export const PostQuery = schema.extendType({
         const findManyArgs: FindManyPostArgs = {
           where: { user: { followers: { some: { id: ctx.req.user.id } } } },
           orderBy: { postAt: 'desc' },
-          take: 3,
+          take: 10,
           skip: cursor ? 1 : 0,
         };
         if (cursor) findManyArgs.cursor = { id: cursor };
