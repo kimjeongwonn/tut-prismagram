@@ -20,6 +20,7 @@ export const Post = schema.objectType({
     t.model.comments();
     t.model.user();
     t.int('likesCount', {
+      nullable: false,
       resolve(root, _, ctx) {
         return ctx.prisma.user.count({ where: { likes: { some: { id: root.id } } } });
       },
