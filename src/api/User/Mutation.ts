@@ -33,6 +33,9 @@ export const UserMutation = schema.extendType({
         ctx.isAuthenticated();
         const { id: userId } = ctx.req.user;
         const { followId } = args;
+        if (userId === followId) {
+          throw new Error('자기 자신은 팔로우 할 수 없습니다');
+        }
         const isFollowing = await ctx.prisma.user.findMany({
           where: {
             AND: [{ id: userId }, { followings: { some: { id: followId } } }],
