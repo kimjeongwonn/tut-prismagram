@@ -13,13 +13,21 @@ export const UserQuery = schema.extendType({
     t.field('seeUser', {
       type: 'User',
       args: {
-        id: schema.stringArg({ required: true }),
+        id: schema.stringArg({ required: false }),
+        username: schema.stringArg({ required: false }),
       },
       /// @ts-ignore
-      resolve(_, args, ctx, info) {
-        return ctx.prisma.user.findOne({
-          where: { id: args.id },
-        });
+      async resolve(_, args, ctx, info) {
+        if (args.id) {
+          return ctx.prisma.user.findOne({
+            where: { id: args.id },
+          });
+        } else if (args.username) {
+          const userArray = await ctx.prisma.user.findMany({ where: { username: args.username } });
+          return userArray[0];
+        } else {
+          throw new Error('arguments 중 하나는 입력해야 합니다');
+        }
       },
     });
     t.field('seeMy', {

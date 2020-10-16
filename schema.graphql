@@ -3,8 +3,8 @@
 
 
 type AutoPayload {
-  approvedUser: User!
-  token: String!
+  approvedUser: User
+  token: String
 }
 
 type Comment {
@@ -43,25 +43,25 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
-  addComment(postId: Int!, text: String!): Comment!
-  confirmSecret(email: String!, secret: String!): String!
-  createAccount(email: String!, firstName: String, lastName: String, username: String!): Boolean!
-  editUser(bio: String, firstName: String, lastName: String, username: String): User!
-  followToggle(followId: String!): Boolean!
+  addComment(postId: Int!, text: String!): Comment
+  confirmSecret(email: String!, secret: String!): String
+  createAccount(email: String!, firstName: String, lastName: String, username: String!): Boolean
+  editUser(bio: String, firstName: String, lastName: String, username: String): User
+  followToggle(followId: String!): Boolean
   modifyPost(action: PostAction!, caption: String, location: String, postId: Int!): Post
-  requestSecret(email: String!): Boolean!
-  SendMessage(roomId: Int, text: String!, toUserId: ID, toUserName: String!): Message!
-  toggleLike(postId: Int!): Boolean!
-  writePost(caption: String, location: String, url: [String!]!): Post!
+  requestSecret(email: String!): Boolean
+  SendMessage(roomId: Int, text: String!, toUserId: ID, toUserName: String!): Message
+  toggleLike(postId: Int!): Boolean
+  writePost(caption: String, location: String, url: [String]!): Post
 }
 
 type Post {
   caption: String
   comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int): [Comment!]!
-  commentsCount: Int!
+  commentsCount: Int
   files(after: FileWhereUniqueInput, before: FileWhereUniqueInput, first: Int, last: Int): [File!]!
   id: Int!
-  isLike: Boolean!
+  isLike: Boolean
   likes(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
   likesCount: Int!
   location: String
@@ -79,44 +79,44 @@ input PostWhereUniqueInput {
 }
 
 type Query {
-  allUsers: [User!]!
-  checkUser(email: String, username: String): Boolean!
-  searchPost(keyword: String!): [Post!]!
-  searchUsers(keyword: String!): [User!]!
-  seeFeed(cursor: Int): [Post!]!
-  seeMy: User!
-  seeMyPosts: [Post!]!
-  seeMyRooms: [Room!]!
-  seePost(postId: Int!): Post!
-  seeUser(id: String!): User!
-  seeUserPosts(userId: ID!): [Post!]!
+  allUsers: [User]
+  checkUser(email: String, username: String): Boolean
+  searchPost(keyword: String!): [Post]
+  searchUsers(keyword: String!): [User]
+  seeFeed(cursor: Int): [Post]
+  seeMy: User
+  seeMyPosts: [Post]
+  seeMyRooms: [Room]
+  seePost(postId: Int!): Post
+  seeUser(id: String, username: String): User
+  seeUserPosts(userId: ID!): [Post]
 }
 
 type Room {
   id: Int!
   messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int, last: Int): [Message!]!
   participant(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
-  seeMessages(cursor: Int): [Message!]!
+  seeMessages(cursor: Int): [Message]
 }
 
 type Subscription {
-  newMessage(roomId: Int!): Message!
+  newMessage(roomId: Int!): Message
 }
 
 type User {
   bio: String
   firstName: String
   followers(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
-  followersCount: Int!
+  followersCount: Int
   followings(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
-  followingsCount: Int!
-  fullName: String!
+  followingsCount: Int
+  fullName: String
   id: String!
-  isFollowing: Boolean!
-  isSelf: Boolean!
+  isFollowing: Boolean
+  isSelf: Boolean
   lastName: String
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int): [Post!]!
-  postsCount: Int!
+  postsCount: Int
   profileImage: String
   username: String!
 }

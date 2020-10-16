@@ -53,8 +53,8 @@ export interface NexusGenScalars {
 
 export interface NexusGenRootTypes {
   AutoPayload: { // root type
-    approvedUser: NexusGenRootTypes['User']; // User!
-    token: string; // String!
+    approvedUser?: NexusGenRootTypes['User'] | null; // User
+    token?: string | null; // String
   }
   Comment: { // root type
     id: number; // Int!
@@ -108,8 +108,8 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 
 export interface NexusGenFieldTypes {
   AutoPayload: { // field return type
-    approvedUser: NexusGenRootTypes['User']; // User!
-    token: string; // String!
+    approvedUser: NexusGenRootTypes['User'] | null; // User
+    token: string | null; // String
   }
   Comment: { // field return type
     id: number; // Int!
@@ -130,24 +130,24 @@ export interface NexusGenFieldTypes {
     timeStamp: NexusGenScalars['DateTime']; // DateTime!
   }
   Mutation: { // field return type
-    addComment: NexusGenRootTypes['Comment']; // Comment!
-    confirmSecret: string; // String!
-    createAccount: boolean; // Boolean!
-    editUser: NexusGenRootTypes['User']; // User!
-    followToggle: boolean; // Boolean!
+    addComment: NexusGenRootTypes['Comment'] | null; // Comment
+    confirmSecret: string | null; // String
+    createAccount: boolean | null; // Boolean
+    editUser: NexusGenRootTypes['User'] | null; // User
+    followToggle: boolean | null; // Boolean
     modifyPost: NexusGenRootTypes['Post'] | null; // Post
-    requestSecret: boolean; // Boolean!
-    SendMessage: NexusGenRootTypes['Message']; // Message!
-    toggleLike: boolean; // Boolean!
-    writePost: NexusGenRootTypes['Post']; // Post!
+    requestSecret: boolean | null; // Boolean
+    SendMessage: NexusGenRootTypes['Message'] | null; // Message
+    toggleLike: boolean | null; // Boolean
+    writePost: NexusGenRootTypes['Post'] | null; // Post
   }
   Post: { // field return type
     caption: string | null; // String
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
-    commentsCount: number; // Int!
+    commentsCount: number | null; // Int
     files: NexusGenRootTypes['File'][]; // [File!]!
     id: number; // Int!
-    isLike: boolean; // Boolean!
+    isLike: boolean | null; // Boolean
     likes: NexusGenRootTypes['User'][]; // [User!]!
     likesCount: number; // Int!
     location: string | null; // String
@@ -155,41 +155,41 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
-    allUsers: NexusGenRootTypes['User'][]; // [User!]!
-    checkUser: boolean; // Boolean!
-    searchPost: NexusGenRootTypes['Post'][]; // [Post!]!
-    searchUsers: NexusGenRootTypes['User'][]; // [User!]!
-    seeFeed: NexusGenRootTypes['Post'][]; // [Post!]!
-    seeMy: NexusGenRootTypes['User']; // User!
-    seeMyPosts: NexusGenRootTypes['Post'][]; // [Post!]!
-    seeMyRooms: NexusGenRootTypes['Room'][]; // [Room!]!
-    seePost: NexusGenRootTypes['Post']; // Post!
-    seeUser: NexusGenRootTypes['User']; // User!
-    seeUserPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    allUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    checkUser: boolean | null; // Boolean
+    searchPost: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    searchUsers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    seeFeed: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    seeMy: NexusGenRootTypes['User'] | null; // User
+    seeMyPosts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    seeMyRooms: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
+    seePost: NexusGenRootTypes['Post'] | null; // Post
+    seeUser: NexusGenRootTypes['User'] | null; // User
+    seeUserPosts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
   }
   Room: { // field return type
     id: number; // Int!
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
     participant: NexusGenRootTypes['User'][]; // [User!]!
-    seeMessages: NexusGenRootTypes['Message'][]; // [Message!]!
+    seeMessages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
   }
   Subscription: { // field return type
-    newMessage: NexusGenRootTypes['Message']; // Message!
+    newMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
     bio: string | null; // String
     firstName: string | null; // String
     followers: NexusGenRootTypes['User'][]; // [User!]!
-    followersCount: number; // Int!
+    followersCount: number | null; // Int
     followings: NexusGenRootTypes['User'][]; // [User!]!
-    followingsCount: number; // Int!
-    fullName: string; // String!
+    followingsCount: number | null; // Int
+    fullName: string | null; // String
     id: string; // String!
-    isFollowing: boolean; // Boolean!
-    isSelf: boolean; // Boolean!
+    isFollowing: boolean | null; // Boolean
+    isSelf: boolean | null; // Boolean
     lastName: string | null; // String
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
-    postsCount: number; // Int!
+    postsCount: number | null; // Int
     profileImage: string | null; // String
     username: string; // String!
   }
@@ -241,7 +241,7 @@ export interface NexusGenArgTypes {
     writePost: { // args
       caption?: string | null; // String
       location?: string | null; // String
-      url: string[]; // [String!]!
+      url: Array<string | null>; // [String]!
     }
   }
   Post: {
@@ -282,7 +282,8 @@ export interface NexusGenArgTypes {
       postId: number; // Int!
     }
     seeUser: { // args
-      id: string; // String!
+      id?: string | null; // String
+      username?: string | null; // String
     }
     seeUserPosts: { // args
       userId: string; // ID!
